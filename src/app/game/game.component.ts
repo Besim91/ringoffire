@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogAddPlayerComponent} from './../dialog-add-player/dialog-add-player.component';
+import { GameInfoComponent} from './../game-info/game-info.component';
+
 
 @Component({
   selector: 'app-game',
@@ -16,6 +18,7 @@ import { DialogAddPlayerComponent} from './../dialog-add-player/dialog-add-playe
     CommonModule, 
     PlayerComponent,
     MatButtonModule,
+    GameInfoComponent,
     MatIconModule
   ],
   templateUrl: './game.component.html',
@@ -46,6 +49,10 @@ export class GameComponent implements OnInit {
     }
     this.pickCardAnimation = true;
 
+
+    this.game.currentPlayer++;
+    this.game.currentPlayer = this.game.currentPlayer % this.game.player.length;
+
     setTimeout(() => {
       this.game.playedCards.push(this.currentCard);
       this.pickCardAnimation = false;
@@ -60,7 +67,9 @@ export class GameComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
 
     dialogRef.afterClosed().subscribe((name: string) => {
-      this.game.player.push(name);
+      if (name && name.length > 0) {
+        this.game.player.push(name);
+      }
     });
   }
 }
